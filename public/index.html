@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0>
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <link rel="stylesheet" href="<%= BASE_URL %>css/reset.css">
+    <!-- 字体图标在线地址 -->
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2003806_u511kbjpdt.css">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      html,body{
+        width:100%;
+        height:100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="https://as.alipayobjects.com/g/component/fastclick/1.0.6/fastclick.js"></script>
+    <script>
+      window.onload=function () {
+        // 解决click在移动端300ms的延迟
+        if ('addEventListener' in document) {
+            document.addEventListener('DOMContentLoaded', function() {
+                FastClick.attach(document.body);
+            }, false);
+        }
+
+      }
+    </script>
+  </body>
+</html>
