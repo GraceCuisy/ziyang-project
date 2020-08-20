@@ -1,7 +1,33 @@
 <template>
   <div class="indexContainer">
-    <!-- 弹窗 -->
-    <!-- <messageDialog></messageDialog> -->
+    <!-- 6种通用展示的弹窗 -->
+    <messageDialog :isShowDialog.sync="isShowDialog"  v-if="isShowDialog">
+      <template v-slot:tit> 
+        <div v-if="isOutofRange">
+          <div class="messageTit">感谢关注</div>
+          <div class="messagecontent">本活动仅限资阳地区用户参加</div>
+        </div>
+        <div v-if="isWrongDate">
+          <div class="messageTit">活动还未开始哦</div>
+          <div class="messagecontent">本活动仅在周六周日进行</div>
+        </div>
+        <div v-if="isDuplicateApply">
+          <div class="messagecontent">今日你已领取立减金<br>请下个活动日再来哦</div>
+        </div>
+        <div v-if="isStockEmpty">
+          <div class="messagecontent">今日立减金已抢完<br>请下个活动日再来</div>
+        </div>
+        <div v-if="isActivityOver">
+          <div class="messagecontent">当前活动已结束</div>
+        </div>
+        <div v-if="isSuccessMessage">
+          <div class="messageTit">哇哦~ 恭喜你</div>
+          <div class="messagecontent">获得<span :style="{color:'#ff7855'}">{{value}}</span>元买菜立减金<br/>请到微信卡包中查看并尽快使用</div>
+        </div>
+      </template>
+    </messageDialog>
+    <!-- 支付页面的弹窗 -->
+    <messageDialogToPay :isMeetRequirements.sync="isMeetRequirements"  v-if="isMeetRequirements"></messageDialogToPay>
     <div class="header">
       <img class="topImg" src="../../common/images/bg_02.jpg" alt="">
       <div class="recordBtn" @click="toRecordPage">
@@ -13,7 +39,8 @@
         <!-- 中间买菜立减金部分 -->
         <div class="middlePay">
           <img class="weixinStamp" src="../../common/images/quan_03.png" alt="">
-          <img class="collectBtn" src="../../common/images/an_03.png" alt="">
+          <!-- 支付1分钱领取按钮 -->
+          <img class="collectBtn" @click="handleCollect" src="../../common/images/an_03.png" alt="">
           <div class="eGuideBtn" @click="toEGuide">
             <span>如何开通工银e支付</span>
             <i class="wenBtn"></i>
@@ -50,8 +77,14 @@
 <script>
 import BScroll from "better-scroll"
 import messageDialog from "../../components/messageDialog/messageDialog"
+import messageDialogToPay from "../../components/messageDialogToPay/messageDialogToPay"
+import {reqCreate} from "../../api/index"
 export default {
   name: 'index',
+  components:{
+    messageDialog,
+    messageDialogToPay
+  },
   data() {
     return {
       isShowDialog:false, //是否显示消息弹窗
@@ -60,20 +93,23 @@ export default {
       isWrongDate:false, //是否日期错误
       isDuplicateApply:false, //是否重复领取
       isActivityOver:false, //是否活动结束
-      isMeetRequirements:false, //是否满足条件
-      issuccessMessage:false, //是否是支付成功的提醒消息
+      isMeetRequirements:false, //是否满足条件,符合条件进入支付流程
+      isSuccessMessage:false, //是否是支付成功的提醒消息
+      value:20, //立减金金额
     }
   },
-  mounted() {
+  async mounted() {
     this.$nextTick(()=>{
       this.scroll=new BScroll(this.$refs.contentWrap,{
         scrollY:true,
         click:true,
       })
     })
-  },
-  components:{
-    messageDialog
+
+    // 测试接口
+    // const result = await reqCreate()
+    // console.log(result);
+    
   },
   methods: {
     toEGuide(){
@@ -81,6 +117,11 @@ export default {
     },
     toRecordPage(){
       this.$router.push({path:'/collectRecord'})
+    },
+    // 点击支付1分钱领取按钮的回调
+    handleCollect(){
+      // 发送请求,获取这7种结果中的一种
+      this.isMeetRequirements=true;
     }
   },
 }
@@ -92,6 +133,24 @@ export default {
     height 100%
     background-color #FFE7B0
     overflow hidden
+    .messageTit
+      font-size 30px
+      color #333
+      font-weight bold
+      text-align center
+      margin-bottom 12px
+    .messagecontent
+      font-size 26px
+      font-weight bold
+      line-height 38px
+      color #666
+      text-align center
+    .dialogEBtn
+      font-size 26px
+      font-weight bold
+      color #ff7856
+    .toPay
+      margin-bottom 76px !important
     .header
       position relative
       z-index 9

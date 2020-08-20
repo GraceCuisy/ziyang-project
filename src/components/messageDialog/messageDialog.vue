@@ -3,7 +3,7 @@
   <div class="dialogWrap">
     <div class="messageBox">
       <div class="titWrap">
-        <slot></slot>
+        <slot name="tit"></slot>
       </div>
       <div class="buttonWrap">
         <div class="confirmBtn" @click="handleConfirm">好的</div>
@@ -19,16 +19,7 @@ export default {
   methods: {
     // 点击确定的回调函数
     handleConfirm(){
-      console.log(this.isPhoneErr);
-      if(!this.isPhoneErr){
-        // 要去兑换并关闭弹窗
-        console.log("要去兑换并关闭弹窗");
-        this.$emit('update:isShowDialog',false)
-      }else{
-        // 只关闭弹窗
-        console.log("只关闭弹窗");
-        this.$emit('update:isShowDialog',false)
-      }
+      this.$emit('update:isShowDialog',false)
     }
   },
 }
@@ -50,7 +41,7 @@ export default {
       width 446px
       height 330px
       background-color #ffffff
-      border 10px solid #ffdfd7
+      border 10px solid #EBEBEB
       border-radius 30px
       .titWrap
         width 446px

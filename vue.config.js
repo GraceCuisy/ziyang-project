@@ -11,22 +11,15 @@ module.exports={
   devServer:{
     disableHostCheck:true,
     open:true,
-    // proxy:{
-    //   '/api':{ //只处理/api开头路径的请求
-    //     target:'http://localhost:3005', //转发的目标地址
-    //     changeOrigin:true, //支持跨域
-    //     pathRewrite:{
-    //       '^/api':''
-    //     }
-    //   },
-    //   '/net':{ //只处理/net开头路径的请求
-    //     target:'http://m.icbc.com.cn', //转发的目标地址
-    //     changeOrigin:true, //支持跨域
-    //     pathRewrite:{
-    //       '^/net':''
-    //     }
-    //   }
-    // }
+    proxy:{
+      '/api':{ //只处理/api开头路径的请求
+        target:'https://rel.leygoo.cn/api/miniapp/cardpay_fanpai/ziyang', //转发的目标地址
+        changeOrigin:true, //支持跨域
+        pathRewrite:{
+          '^/api':''
+        }
+      }
+    }
   },
   css: {
     loaderOptions: {
